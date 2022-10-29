@@ -1,0 +1,183 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import React from 'react';
+import { StackActions } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Keyboard,
+  ScrollView,
+  Alert,
+  ImageBackground,
+  Image,
+} from 'react-native';
+import COLORS from '../colors';
+import Button from '../components/Button';
+import Input from '../components/Input';
+import Loader from '../components/Loader';
+import { MuMap } from './Map';
+img=require('client/assets/image.jpeg')
+
+const RegistrationScreen = ({navigation}) => {
+  const [inputs, setInputs] = React.useState({
+    username: '',
+    email: '',
+    phone: '',
+    source: '',
+    destination:'',
+  });
+  const [errors, setErrors] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+
+  const validate = async() => {
+    Keyboard.dismiss();
+
+    let isValid = true;
+
+    if (!inputs.email) {
+      handleError('Please input email', 'email');
+      isValid = false;
+    } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
+      handleError('Please input a valid email', 'email');
+      isValid = false;
+    }
+
+    if (!inputs.username) {
+      handleError('Please input username', 'username');
+      isValid = false;
+    }
+
+    if (!inputs.phone) {
+      handleError('Please input phone number', 'phone');
+
+      isValid = false;
+    }
+    if(inputs.phone.length!==10)
+    {
+      handleError('Please input valid phone number','phone')
+      isValid=false;
+    }
+    if (!inputs.source) {
+      handleError('Please input source', 'source');
+      isValid = false;
+    } 
+    if (!inputs.destination) {
+        handleError('Please input destination', 'destination');
+        isValid = false;
+      } 
+
+    if (isValid) {
+      register();
+    }
+    else{
+      console.log("Validation error");
+    }
+  };
+
+  const register = async() => {
+    setLoading(true);
+    setTimeout(async()=>{
+          const data=JSON.stringify({
+            username: inputs.username,
+            gmail: inputs.email,
+            phone: inputs.phone,
+            source: inputs.source,
+            destination : inputs.destination,
+          });
+          try {
+                  const res = await axios.post('http://192.168.29.228:8000/register', {
+                    data
+              })
+              if(JSON.parse(res.data.success))
+              {
+                setLoading(false)
+                Alert.alert("Successful Registration");
+                return(
+                navigation.dispatch(
+                    StackActions.replace('Map')
+                )
+              );
+              }
+              else{
+                setLoading(false)
+                Alert.alert((res.data.message));
+              }
+          } catch (error) {
+            setLoading(false)
+            console.log(error);
+          }
+    },3000);
+    };
+  const handleOnchange = (text, input) => {
+    setInputs(prevState => ({...prevState, [input]: text}));
+  };
+  const handleError = (error, input) => {
+    setErrors(prevState => ({...prevState, [input]: error}));
+  };
+  return (
+    <SafeAreaView style={{backgroundColor: COLORS.white, flex: 1}}>
+      <Loader visible={loading} />
+      <ScrollView
+        contentContainerStyle={{paddingTop: 50, paddingHorizontal: 20}}>
+        <Image source={img} style={{alignItems: 'center', justifyContent: 'center',marginLeft:'15%'}} />
+
+        <Text style={{color: COLORS.darkBlue, fontSize: 30,marginLeft:'15%', fontWeight: 'bold'}}>
+          Museum Register
+        </Text>
+        <Text style={{color: COLORS.grey, fontSize: 18, marginVertical: 10}}>
+          Enter Your Details
+        </Text>
+        <View style={{marginVertical: 7}}>
+
+           <Input
+            onChangeText={text => handleOnchange(text, 'username')}
+            onFocus={() => handleError(null, 'username')}
+            iconName="account-outline"
+            label="User Name"
+            placeholder="Enter a User name"
+            error={errors.username}
+          />
+
+          <Input
+            onChangeText={text => handleOnchange(text, 'email')}
+            onFocus={() => handleError(null, 'email')}
+            iconName="email-outline"
+            label="Email"
+            placeholder="Enter your email address"
+            error={errors.email}
+          />
+
+          <Input
+            keyboardType="numeric"
+            onChangeText={text => handleOnchange(text, 'phone')}
+            onFocus={() => handleError(null, 'phone')}
+            iconName="phone-outline"
+            label="Phone Number"
+            placeholder="Enter your phone no"
+            error={errors.phone}
+          />
+          <Input
+            onChangeText={text => handleOnchange(text, 'source')}
+            onFocus={() => handleError(null, 'source')}
+            iconName="location-enter"
+            label="Source"
+            placeholder="Enter Source"
+            error={errors.source}
+          />
+        <Input
+            onChangeText={text => handleOnchange(text, 'destination')}
+            onFocus={() => handleError(null, 'destination')}
+            iconName="location-exit"
+            label="destination"
+            placeholder="Enter your Destination"
+            error={errors.destination}
+          />
+          <Button title="Register" onPress={validate} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default RegistrationScreen;
