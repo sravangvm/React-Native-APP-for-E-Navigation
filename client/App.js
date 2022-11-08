@@ -16,8 +16,6 @@ const App = () => {
       <Stack.Screen name="User" component={UserDetails} options={{ headerShown: false }} />
     </Stack.Navigator>
     </NavigationContainer>
-    // <MuMap />
-    //<UserDetails />
   );
 };
 export default App;
