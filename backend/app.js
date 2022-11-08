@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.post('/register',async (req,res)=>{
     try {
-      const { username, gmail, phone, source, destination } =  JSON.parse(req.body.data);
+      const { username, gmail, phone} =  JSON.parse(req.body.data);
       const isNewUser = await User.userAlreadyInUse(username);
       if (!isNewUser)
         return res.json({
@@ -29,13 +29,24 @@ app.post('/register',async (req,res)=>{
         });
       console.log("sucessfull registration");
       const user = await User({
-        username, gmail, phone, source, destination,
+        username, gmail, phone
       });
-      //await user.save();
+      await user.save();
       res.json({ success: true, user });
     } catch (error) {
         return res.json(`no reg`);
     }
+});
+
+app.get('/userdetails/:username',async(req,res)=>{
+  const usename=req.params.username;
+  User.find({username:usename},(err,result)=>{
+      if(err)
+      {
+          res.send(err)
+      }
+      res.send(result)
+  })
 });
 
 app.listen(8000, ()=>{

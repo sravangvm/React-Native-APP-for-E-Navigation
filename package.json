@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@ant-design/react-native": "^5.0.2",
+    "react-native-element-dropdown": "^2.3.1"
+  }
+}

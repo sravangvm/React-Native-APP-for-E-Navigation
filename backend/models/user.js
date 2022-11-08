@@ -14,14 +14,6 @@ const LoginSchema= new mongoose.Schema({
         type: Number,
         required: true,
     },
-    source:{
-        type: String,
-        required: true,
-    },
-    destination:{
-        type: String,
-        required: true,
-    },
 });
 LoginSchema.statics.userAlreadyInUse= async function(username){
     try {

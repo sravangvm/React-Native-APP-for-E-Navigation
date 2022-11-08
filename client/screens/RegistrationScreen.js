@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React from 'react';
 import { StackActions } from '@react-navigation/native';
@@ -24,8 +23,6 @@ const RegistrationScreen = ({navigation}) => {
     username: '',
     email: '',
     phone: '',
-    source: '',
-    destination:'',
   });
   const [errors, setErrors] = React.useState({});
   const [loading, setLoading] = React.useState(false);
@@ -58,15 +55,6 @@ const RegistrationScreen = ({navigation}) => {
       handleError('Please input valid phone number','phone')
       isValid=false;
     }
-    if (!inputs.source) {
-      handleError('Please input source', 'source');
-      isValid = false;
-    } 
-    if (!inputs.destination) {
-        handleError('Please input destination', 'destination');
-        isValid = false;
-      } 
-
     if (isValid) {
       register();
     }
@@ -82,8 +70,6 @@ const RegistrationScreen = ({navigation}) => {
             username: inputs.username,
             gmail: inputs.email,
             phone: inputs.phone,
-            source: inputs.source,
-            destination : inputs.destination,
           });
           try {
                   const res = await axios.post('http://192.168.29.228:8000/register', {
@@ -93,11 +79,12 @@ const RegistrationScreen = ({navigation}) => {
               {
                 setLoading(false)
                 Alert.alert("Successful Registration");
-                return(
+               
                 navigation.dispatch(
-                    StackActions.replace('Map')
+                    StackActions.replace('Map',{
+                      username:inputs.username
+                    })
                 )
-              );
               }
               else{
                 setLoading(false)
@@ -123,7 +110,7 @@ const RegistrationScreen = ({navigation}) => {
         <Image source={img} style={{alignItems: 'center', justifyContent: 'center',marginLeft:'15%'}} />
 
         <Text style={{color: COLORS.darkBlue, fontSize: 30,marginLeft:'15%', fontWeight: 'bold'}}>
-          Museum Register
+          User Registration
         </Text>
         <Text style={{color: COLORS.grey, fontSize: 18, marginVertical: 10}}>
           Enter Your Details
@@ -156,22 +143,6 @@ const RegistrationScreen = ({navigation}) => {
             label="Phone Number"
             placeholder="Enter your phone no"
             error={errors.phone}
-          />
-          <Input
-            onChangeText={text => handleOnchange(text, 'source')}
-            onFocus={() => handleError(null, 'source')}
-            iconName="location-enter"
-            label="Source"
-            placeholder="Enter Source"
-            error={errors.source}
-          />
-        <Input
-            onChangeText={text => handleOnchange(text, 'destination')}
-            onFocus={() => handleError(null, 'destination')}
-            iconName="location-exit"
-            label="destination"
-            placeholder="Enter your Destination"
-            error={errors.destination}
           />
           <Button title="Register" onPress={validate} />
         </View>
