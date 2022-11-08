@@ -16,7 +16,6 @@ const MuMap = ({navigation,route}) => {
       <View>
       <Ionicons name="ios-person-circle-outline" size={50} color={COLORS.darkBlue} style={{marginTop:30,marginRight:340}} onPress={gotoUser} />
       <DropdownComponent1 />
-      {/* <DropdownComponent2/> */}
       </View>
     </ScrollView>
   );
