@@ -5,23 +5,23 @@ import { MiMapView } from '@mappedin/react-native-sdk';
 import { Text , View, Image} from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
 import Button from '../components/Button';
+import client from '../client';
 
 
 export function UserDetails ({navigation,route}) {
     const[user,setUser]=useState([])
     const [usename,setUsername]= useState("")
-    const goback=()=>{
-        navigation.navigate('Map')
-    }
-    
     useEffect(()=>{
       const {username}=route.params;
       setUsername(username);
-        Axios.get(`http://192.168.29.228:8000/userdetails/${username}`).then((response)=>{
+        client.get(`/userdetails/${username}`).then((response)=>{
         //console.log(response.data)
         setUser(response.data);
         })
       },[]);
+    const goback=()=>{
+        navigation.navigate('Map',{"username":usename})
+    }
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

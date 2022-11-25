@@ -17,6 +17,7 @@ import Input from '../components/Input';
 import Loader from '../components/Loader';
 import { MuMap } from './Map';
 img=require('client/assets/image.jpeg')
+import client from '../client';
 
 const RegistrationScreen = ({navigation}) => {
   const [inputs, setInputs] = React.useState({
@@ -72,7 +73,7 @@ const RegistrationScreen = ({navigation}) => {
             phone: inputs.phone,
           });
           try {
-                  const res = await axios.post('http://192.168.29.228:8000/register', {
+                  const res = await client.post('/register', {
                     data
               })
               if(JSON.parse(res.data.success))

@@ -15,6 +15,8 @@ mongoose.connect('mongodb+srv://sravangvm:gorugantu27@cluster0.46iapnv.mongodb.n
 })
 .catch(err=>console.log(err.message));
 
+const path=require('./models/shortestPath');
+const actual_path=require('./models/actualString');
 const User=require('./models/user');
 app.use(express.json());
 
@@ -47,6 +49,17 @@ app.get('/userdetails/:username',async(req,res)=>{
       }
       res.send(result)
   })
+});
+
+app.post('/path',async (req,res)=>{
+  try {
+    const {source, destination} =req.body;
+    var ans= await path(source,destination);
+    ans=actual_path(ans);
+    res.json({ success: true, ans });
+  } catch (error) {
+      return res.json('No path');
+  }
 });
 
 app.listen(8000, ()=>{
