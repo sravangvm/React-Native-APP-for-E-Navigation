@@ -2,25 +2,35 @@ const express= require('express')
 const app=express();
 require('dotenv').config();
 
+const bodyParser=require('body-parser')
 const mongoose=require('mongoose')
 
 var cors = require('cors');
 app.use(cors());
+app.use(bodyParser.urlencoded({
+  extended:true,
+}))
+app.use(bodyParser.json())
+app.use(express.json())
 
 mongoose.connect('mongodb+srv://sravangvm:gorugantu27@cluster0.46iapnv.mongodb.net/test',{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(()=>{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  }).then(()=>{
     console.log('Connection OK!');
-})
-.catch(err=>console.log(err.message));
-
-const path=require('./models/shortestPath');
-const actual_path=require('./models/actualString');
-const User=require('./models/user');
-app.use(express.json());
-
-app.post('/register',async (req,res)=>{
+  })
+  .catch(err=>console.log(err.message));
+  
+  const path=require('./models/shortestPath');
+  const actual_path=require('./models/actualString');
+  const User=require('./models/user');
+  app.use(express.json());
+  
+  
+  app.listen(8000, ()=>{
+      console.log("Server running on 8000");
+  })
+  app.post('/register',async (req,res)=>{
     try {
       const { username, gmail, phone} =  JSON.parse(req.body.data);
       const isNewUser = await User.userAlreadyInUse(username);
@@ -51,17 +61,14 @@ app.get('/userdetails/:username',async(req,res)=>{
   })
 });
 
-app.post('/path',async (req,res)=>{
+app.post('/path',async(req,res)=>{
   try {
-    const {source, destination} =req.body;
+    const {source, destination} =(req.body);
     var ans= await path(source,destination);
     ans=actual_path(ans);
     res.json({ success: true, ans });
   } catch (error) {
+    console.log(error);
       return res.json('No path');
   }
 });
-
-app.listen(8000, ()=>{
-    console.log("Server running on 8000");
-})

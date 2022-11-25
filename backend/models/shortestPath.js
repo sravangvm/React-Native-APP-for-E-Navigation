@@ -147,18 +147,16 @@ class Node {
   graph.addVertex("E");
   graph.addVertex("F");
   
-  graph.addEdge("A", "B", 4);
-  graph.addEdge("A", "C", 2);
-  graph.addEdge("B", "E", 3);
-  graph.addEdge("C", "D", 2);
-  graph.addEdge("C", "F", 4);
-  graph.addEdge("D", "E", 3);
-  graph.addEdge("D", "F", 1);
-  graph.addEdge("E", "F", 1);
+  graph.addEdge("A", "B", 20);
+  graph.addEdge("A", "D", 40);
+  graph.addEdge("B", "C", 10);
+  graph.addEdge("B", "F" , 20);
+  graph.addEdge("C", "D", 20);
+  graph.addEdge("D", "E", 17);
+  graph.addEdge("E", "F", 30);
  
   module.exports= async function(source,destination){
     ans:graph.Dijkstra(source,destination)
     const a=graph.Dijkstra(source,destination);
-    // console.log(a);
     return a;
   };
