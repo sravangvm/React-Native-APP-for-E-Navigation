@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import { StackActions } from '@react-navigation/native';
 import {
@@ -8,14 +7,12 @@ import {
   Keyboard,
   ScrollView,
   Alert,
-  ImageBackground,
   Image,
 } from 'react-native';
 import COLORS from '../colors';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import Loader from '../components/Loader';
-import { MuMap } from './Map';
 img=require('client/assets/image.jpeg')
 import client from '../client';
 

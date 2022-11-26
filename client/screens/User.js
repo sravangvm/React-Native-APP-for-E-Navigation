@@ -1,9 +1,5 @@
 import React, { useState , useEffect} from 'react';
-import Axios from 'axios';
-import { SafeAreaView } from 'react-native';
-import { MiMapView } from '@mappedin/react-native-sdk';
-import { Text , View, Image} from 'react-native';
-import { Ionicons } from "@expo/vector-icons";
+import { Text , View} from 'react-native';
 import Button from '../components/Button';
 import client from '../client';
 
